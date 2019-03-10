@@ -1,12 +1,13 @@
-package validator
+package validators
 
 import (
 	"fmt"
 	"reflect"
+	"strconv"
 	"strings"
 
 	constants "github.com/techbrosource/go-validators/constants"
-	validators "github.com/techbrosource/go-validators/struct-validators"
+	validators "github.com/techbrosource/go-validators/structvalidators"
 )
 
 // Validator is Generic data validator.
@@ -16,24 +17,30 @@ type Validator interface {
 
 // Returns validator struct corresponding to validation type
 func getValidatorFromTag(tag string) Validator {
-	args := strings.Split(tag, ",")
+	args := strings.Split(tag, constants.Comma)
 
 	switch args[0] {
 	case constants.NumTag:
 		validator := validators.NumberValidator{}
-		fmt.Sscanf(strings.Join(args[1:], ","), "min=%d,max=%d", &validator.Min, &validator.Max)
+		fmt.Println(strings.Join(args[1:], constants.Comma))
+		fmt.Sscanf(strings.Join(args[1:], constants.Comma), "min=%d,max=%d", &validator.Min, &validator.Max)
 		return validator
 	case constants.StringTag:
 		validator := validators.StringValidator{}
-		fmt.Sscanf(strings.Join(args[1:], ","), "min=%d,max=%d", &validator.Min, &validator.Max)
+		fmt.Println(strings.Join(args[1:], constants.Comma))
+		fmt.Sscanf(strings.Join(args[1:], constants.Comma), "min=%d,max=%d", &validator.Min, &validator.Max)
+		fmt.Sscanf(strings.Join(args[1:], constants.Comma), "max=%d", &validator.Max)
+		fmt.Println("min = " + strconv.Itoa(validator.Min))
+		fmt.Println("max = " + strconv.Itoa(validator.Max))
 		return validator
 	case constants.StringRegexTag:
 		validator := validators.StringRegexValidator{}
-		fmt.Sscanf(strings.Join(args[1:], ","), "regex=%s", &validator.Regex)
+		fmt.Println(strings.Join(args[1:], constants.Comma))
+		fmt.Sscanf(strings.Join(args[1:], constants.Comma), "regex=%s", &validator.Regex)
 		return validator
 	case constants.EnumTag:
 		validator := validators.EnumValidator{}
-		fmt.Sscanf(strings.Join(args[1:], ","), "name=%s", &validator.Name)
+		fmt.Sscanf(strings.Join(args[1:], constants.Comma), "name=%s", &validator.Name)
 		return validator
 	default:
 		return validators.DefaultValidator{}
@@ -61,21 +68,20 @@ func ValidateStruct(s interface{}) []error {
 	return errors
 }
 
-// type User struct {
-// 	Id   int `validate:"number,min=1,max=1000"`
-// 	Name string
-// 	Bio  string
-// }
+type StringTest struct {
+	blankStr string `validate:"string,max=10"`
+	minStr   string `validate:"string,min=1"`
+}
 
 // func main() {
-// 	user := User{
+// 	stringTest := StringTest{
 // 		Id:   0,
 // 		Name: "superlongstring",
 // 		Bio:  "",
 // 	}
 
-// 	fmt.Println("Errors:")
-// 	for i, err := range ValidateStruct(user) {
+// 	fmt.Println("Errors of string test:")
+// 	for i, err := range ValidateStruct(stringTest) {
 // 		fmt.Printf("\t%d. %s\n", i+1, err.Error())
 // 	}
 // }

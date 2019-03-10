@@ -5,6 +5,7 @@ const (
 	Hyphen     = "-"
 	Empty      = ""
 	WhiteSpace = " "
+	Comma      = ","
 )
 
 // Name of the struct tag used in examples.

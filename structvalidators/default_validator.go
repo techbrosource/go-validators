@@ -1,4 +1,4 @@
-package validator
+package structvalidators
 
 // DefaultValidator does not perform any validations.
 type DefaultValidator struct {

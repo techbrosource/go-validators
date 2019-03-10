@@ -1,4 +1,4 @@
-package validator
+package structvalidators
 
 import (
 	"fmt"
@@ -15,22 +15,6 @@ type StringValidator struct {
 
 // Validate performs validation on given string value
 func (v StringValidator) Validate(val interface{}) (bool, error) {
-	l := len(val.(string))
-	if l == 0 {
-		return false, fmt.Errorf(constants.EmptyString)
-	}
-
-	return true, nil
-}
-
-// StringLengthValidator validates string presence and/or its length.
-type StringLengthValidator struct {
-	Min int
-	Max int
-}
-
-// Validate performs validation on given string value
-func (v StringLengthValidator) Validate(val interface{}) (bool, error) {
 	l := len(val.(string))
 	if l == 0 {
 		return false, fmt.Errorf(constants.EmptyString)
