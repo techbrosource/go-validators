@@ -12,7 +12,7 @@ type EnumValidator struct {
 }
 
 // Validate performs validation on given int value
-func (v EnumValidator) Validate(val interface{}) (bool, error) {
+func (v *EnumValidator) Validate(val interface{}) (bool, error) {
 	value := val.(string)
 
 	if value == constants.Empty {

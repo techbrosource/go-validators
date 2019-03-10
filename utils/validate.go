@@ -1,9 +1,7 @@
 package utils
 
 import (
-	"fmt"
 	"reflect"
-	"strings"
 
 	constants "github.com/techbrosource/go-validators/constants"
 	metadata "github.com/techbrosource/go-validators/metadata"
@@ -16,51 +14,26 @@ type Validator interface {
 }
 
 // Returns validator struct corresponding to validation type
-func getValidatorFromTag(tag string) Validator {
-	args := strings.Split(tag, constants.Comma)
+func getValidatorFromTag(tags reflect.StructTag) Validator {
 
-	switch args[0] {
+	switch tags.Get(constants.ValidatorTag) {
 	case constants.NumTag:
-		validator := validators.NumberValidator{}
-		fmt.Println(strings.Join(args[1:], constants.Comma))
-		fmt.Sscanf(strings.Join(args[1:], constants.Comma), "min=%d,max=%d", &validator.Min, &validator.Max)
-		return validator
+		v := validators.NumberValidator{}
+		vp := &v
+		vp.SetProperties(tags)
+		return vp
 	case constants.StringTag:
-		validator := validators.StringValidator{}
-		fmt.Println(strings.Join(args[1:], constants.Comma))
-		fmt.Sscanf(strings.Join(args[1:], constants.Comma), "min=%d,max=%d", &validator.Min, &validator.Max)
-		fmt.Sscanf(strings.Join(args[1:], constants.Comma), "max=%d", &validator.Max)
-		fmt.Sscanf(strings.Join(args[1:], constants.Comma), "regex=%s", &validator.Regex)
-		return validator
+		v := validators.StringValidator{}
+		vp := &v
+		vp.SetProperties(tags)
+		return vp
 	case constants.EnumTag:
-		validator := validators.EnumValidator{}
-		fmt.Sscanf(strings.Join(args[1:], constants.Comma), "name=%s", &validator.Name)
-		return validator
+		v := validators.EnumValidator{}
+		vp := &v
+		return vp
 	default:
-		return validators.DefaultValidator{}
+		return &validators.DefaultValidator{}
 	}
-}
-
-// ValidateStruct : to perform data validation using validator definitions on the struct
-func ValidateStruct(s interface{}) []error {
-	var errors []error
-
-	v := reflect.ValueOf(s)
-
-	for i := 0; i < v.NumField(); i++ {
-		tag := v.Type().Field(i).Tag.Get(constants.ValidatorTag)
-		jsonField := v.Type().Field(i).Tag.Get(constants.JSONTag)
-		if tag == constants.Empty || tag == constants.Hyphen {
-			continue
-		}
-		validator := getValidatorFromTag(tag)
-		valid, err := validator.Validate(v.Field(i).Interface())
-		if !valid && err != nil {
-			errors = append(errors, fmt.Errorf("%s : %s", jsonField, err.Error()))
-			fmt.Println(jsonField)
-		}
-	}
-	return errors
 }
 
 // Validate : to perform data validation using validator definitions on the struct
@@ -75,7 +48,7 @@ func Validate(s interface{}) metadata.Metadatas {
 		if tag == constants.Empty || tag == constants.Hyphen {
 			continue
 		}
-		validator := getValidatorFromTag(tag)
+		validator := getValidatorFromTag(v.Type().Field(i).Tag)
 		valid, err := validator.Validate(v.Field(i).Interface())
 		if !valid && err != nil {
 			fieldMetadatas = append(fieldMetadatas, metadata.GenerateFieldMetadata(v.Type().Field(i), v.Field(i).Interface(), err))
@@ -83,3 +56,25 @@ func Validate(s interface{}) metadata.Metadatas {
 	}
 	return metadata.GenerateMetadata(objectMetadata, fieldMetadatas)
 }
+
+// ValidateStruct : to perform data validation using validator definitions on the struct
+// func ValidateStruct(s interface{}) []error {
+// 	var errors []error
+
+// 	v := reflect.ValueOf(s)
+
+// 	for i := 0; i < v.NumField(); i++ {
+// 		tag := v.Type().Field(i).Tag.Get(constants.ValidatorTag)
+// 		jsonField := v.Type().Field(i).Tag.Get(constants.JSONTag)
+// 		if tag == constants.Empty || tag == constants.Hyphen {
+// 			continue
+// 		}
+// 		validator := getValidatorFromTag(tag)
+// 		valid, err := validator.Validate(v.Field(i).Interface())
+// 		if !valid && err != nil {
+// 			errors = append(errors, fmt.Errorf("%s : %s", jsonField, err.Error()))
+// 			fmt.Println(jsonField)
+// 		}
+// 	}
+// 	return errors
+// }

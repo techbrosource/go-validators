@@ -6,14 +6,20 @@ type StringValidators struct {
 	BlankStr string `json:"blank_string" validate:"string"`
 
 	// validates minimum length of the string
-	MinStr string `json:"min_string" validate:"string,min=2"`
+	MinStr string `json:"min_string" validate:"string" minlen:"2"`
 
 	// validates maximum length of the string
-	MaxStr string `json:"max_string" validate:"string,max=10"`
+	MaxStr string `json:"max_string" validate:"string" maxlen:"10"`
 
 	// validates string length both minimum and maximum
-	MinMaxStr string `json:"min_max_string" validate:"string,min=2,max=10"`
+	MinMaxStr string `json:"min_max_string" validate:"string" minlen:"2" maxlen:"10"`
 
 	// validates string containing only numeric values
-	NumericStr string `json:"numeric_string" validate:"string,regex=^(0|[1-9][0-9]*)$"`
+	NumericStr string `json:"numeric_string" validate:"string" regex:"^(0|[1-9][0-9]*)$"`
+
+	// validates string containing only numeric values with minimum length
+	NumericMinStr string `json:"numeric_min_string" validate:"string" regex:"^(0|[1-9][0-9]*)$" minlen:"2"`
+
+	// validates string containing only numeric values with minimum length
+	NumericRangeStr string `json:"numeric_range_string" validate:"string" regex:"^(0|[1-9][0-9]*)$" minlen:"2" maxlen:"10"`
 }

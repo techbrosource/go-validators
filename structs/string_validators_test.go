@@ -27,7 +27,7 @@ func TestRequired(t *testing.T) {
 
 func TestMinLength(t *testing.T) {
 	testData := struct {
-		TestField string `json:"test_field" validate:"string,min=2"`
+		TestField string `json:"test_field" validate:"string" minlen:"2"`
 	}{
 		TestField: "1",
 	}
@@ -44,7 +44,7 @@ func TestMinLength(t *testing.T) {
 
 func TestMaxLength(t *testing.T) {
 	testData := struct {
-		TestField string `json:"test_field" validate:"string,max=5"`
+		TestField string `json:"test_field" validate:"string" maxlen:"5"`
 	}{
 		TestField: "123456",
 	}
@@ -61,9 +61,9 @@ func TestMaxLength(t *testing.T) {
 
 func TestLengthRange(t *testing.T) {
 	testData := struct {
-		MaxTestField   string `json:"min_test_field" validate:"string,min=2,max=5"`
-		MinTestField   string `json:"max_test_field" validate:"string,min=2,max=5"`
-		ValidTestField string `json:"valid_test_field" validate:"string,min=2,max=5"`
+		MaxTestField   string `json:"min_test_field" validate:"string" minlen:"2" maxlen:"5"`
+		MinTestField   string `json:"max_test_field" validate:"string" minlen:"2" maxlen:"5"`
+		ValidTestField string `json:"valid_test_field" validate:"string" minlen:"2" maxlen:"5"`
 	}{
 		MaxTestField:   "123456",
 		MinTestField:   "1",
@@ -84,13 +84,15 @@ func TestLengthRange(t *testing.T) {
 
 func TestRegexMatch(t *testing.T) {
 	testData := struct {
-		AlphaNumTestField   string `json:"alpha_num_test_field" validate:"string,regex=^(0|[1-9][0-9]*)$"`
-		ZeroPrefixTestField string `json:"zero_prefix_test_field" validate:"string,regex=^(0|[1-9][0-9]*)$"`
-		ValidTestField      string `json:"valid_test_field" validate:"string,regex=^(0|[1-9][0-9]*)$"`
+		AlphaNumTestField   string `json:"alpha_num_test_field" validate:"string" regex:"^(0|[1-9][0-9]*)$"`
+		ZeroPrefixTestField string `json:"zero_prefix_test_field" validate:"string" regex:"^(0|[1-9][0-9]*)$" minlen:"3"`
+		MaxLengthTestField  string `json:"max_length_test_field" validate:"string" regex:"^(0|[1-9][0-9]*)$" minlen:"2" maxlen:"5"`
+		ValidTestField      string `json:"valid_test_field" validate:"string" regex:"^(0|[1-9][0-9]*)$" minlen:"2" maxlen:"5"`
 	}{
 		AlphaNumTestField:   "12345s",
-		ZeroPrefixTestField: "012",
-		ValidTestField:      "12345",
+		ZeroPrefixTestField: "01",
+		MaxLengthTestField:  "1234554s",
+		ValidTestField:      "123",
 	}
 
 	m := validate.Validate(testData)
@@ -98,9 +100,11 @@ func TestRegexMatch(t *testing.T) {
 
 	fe := m.GetFields()
 	NotEqual(t, len(fe), 0)
-	Equal(t, len(fe), 2)
+	Equal(t, len(fe), 3)
 	Equal(t, fe[0].GetName(), "AlphaNumTestField")
 	Equal(t, fe[0].GetError().Error(), constants.InvalidString)
 	Equal(t, fe[1].GetName(), "ZeroPrefixTestField")
-	Equal(t, fe[1].GetError().Error(), constants.InvalidString)
+	Equal(t, fe[1].GetError().Error(), "must be at least 3 chars long")
+	Equal(t, fe[2].GetName(), "MaxLengthTestField")
+	Equal(t, fe[2].GetError().Error(), "must be less than 5 chars long")
 }

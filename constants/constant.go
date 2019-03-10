@@ -12,9 +12,14 @@ const (
 const (
 	ValidatorTag = "validate"
 	JSONTag      = "json"
+	MinNum       = "min"
+	MaxNum       = "max"
+	MinLen       = "minlen"
+	MaxLen       = "maxlen"
+	Regex        = "regex"
 )
 
-// validator tag types
+// values for 'validate' tag
 const (
 	StringTag = "string"
 	NumTag    = "number"
