@@ -1,4 +1,4 @@
-package validators
+package main
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	validate "github.com/techbrosource/go-validators"
 	constants "github.com/techbrosource/go-validators/constants"
 	validators "github.com/techbrosource/go-validators/structvalidators"
 )
@@ -13,6 +14,7 @@ import (
 // Validator is Generic data validator.
 type Validator interface {
 	Validate(interface{}) (bool, error)
+	Validate1(interface{}) (bool, interface{})
 }
 
 // Returns validator struct corresponding to validation type
@@ -60,9 +62,11 @@ func ValidateStruct(s interface{}) []error {
 			continue
 		}
 		validator := getValidatorFromTag(tag)
-		valid, err := validator.Validate(v.Field(i).Interface())
+		valid, err := validator.Validate1(v.Field(i).Interface())
 		if !valid && err != nil {
-			errors = append(errors, fmt.Errorf("%s : %s", jsonField, err.Error()))
+			// errors = append(errors, fmt.Errorf("%s : %s", jsonField, err.Error()))
+			fmt.Println(jsonField)
+			fmt.Println(err.(validate.ValidationError))
 		}
 	}
 	return errors
@@ -73,15 +77,14 @@ type StringTest struct {
 	minStr   string `validate:"string,min=1"`
 }
 
-// func main() {
-// 	stringTest := StringTest{
-// 		Id:   0,
-// 		Name: "superlongstring",
-// 		Bio:  "",
-// 	}
+func main() {
+	stringTest := StringTest{
+		blankStr: "superlongstring",
+		minStr:   "",
+	}
 
-// 	fmt.Println("Errors of string test:")
-// 	for i, err := range ValidateStruct(stringTest) {
-// 		fmt.Printf("\t%d. %s\n", i+1, err.Error())
-// 	}
-// }
+	fmt.Println("Errors of string test:")
+	for i, err := range ValidateStruct(stringTest) {
+		fmt.Printf("\t%d. %s\n", i+1, err.Error())
+	}
+}
