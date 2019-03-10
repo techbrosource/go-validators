@@ -1,20 +1,18 @@
-package main
+package utils
 
 import (
 	"fmt"
 	"reflect"
-	"strconv"
 	"strings"
 
-	validate "github.com/techbrosource/go-validators"
 	constants "github.com/techbrosource/go-validators/constants"
-	validators "github.com/techbrosource/go-validators/structvalidators"
+	metadata "github.com/techbrosource/go-validators/metadata"
+	validators "github.com/techbrosource/go-validators/structs/validators"
 )
 
 // Validator is Generic data validator.
 type Validator interface {
 	Validate(interface{}) (bool, error)
-	Validate1(interface{}) (bool, interface{})
 }
 
 // Returns validator struct corresponding to validation type
@@ -32,12 +30,6 @@ func getValidatorFromTag(tag string) Validator {
 		fmt.Println(strings.Join(args[1:], constants.Comma))
 		fmt.Sscanf(strings.Join(args[1:], constants.Comma), "min=%d,max=%d", &validator.Min, &validator.Max)
 		fmt.Sscanf(strings.Join(args[1:], constants.Comma), "max=%d", &validator.Max)
-		fmt.Println("min = " + strconv.Itoa(validator.Min))
-		fmt.Println("max = " + strconv.Itoa(validator.Max))
-		return validator
-	case constants.StringRegexTag:
-		validator := validators.StringRegexValidator{}
-		fmt.Println(strings.Join(args[1:], constants.Comma))
 		fmt.Sscanf(strings.Join(args[1:], constants.Comma), "regex=%s", &validator.Regex)
 		return validator
 	case constants.EnumTag:
@@ -62,29 +54,32 @@ func ValidateStruct(s interface{}) []error {
 			continue
 		}
 		validator := getValidatorFromTag(tag)
-		valid, err := validator.Validate1(v.Field(i).Interface())
+		valid, err := validator.Validate(v.Field(i).Interface())
 		if !valid && err != nil {
-			// errors = append(errors, fmt.Errorf("%s : %s", jsonField, err.Error()))
+			errors = append(errors, fmt.Errorf("%s : %s", jsonField, err.Error()))
 			fmt.Println(jsonField)
-			fmt.Println(err.(validate.ValidationError))
 		}
 	}
 	return errors
 }
 
-type StringTest struct {
-	blankStr string `validate:"string,max=10"`
-	minStr   string `validate:"string,min=1"`
-}
+// Validate : to perform data validation using validator definitions on the struct
+func Validate(s interface{}) metadata.Metadatas {
+	var fieldMetadatas []metadata.FieldMetadata
 
-func main() {
-	stringTest := StringTest{
-		blankStr: "superlongstring",
-		minStr:   "",
-	}
+	v := reflect.ValueOf(s)
+	objectMetadata := metadata.GenerateObjectMetadata(v.Type())
 
-	fmt.Println("Errors of string test:")
-	for i, err := range ValidateStruct(stringTest) {
-		fmt.Printf("\t%d. %s\n", i+1, err.Error())
+	for i := 0; i < v.NumField(); i++ {
+		tag := v.Type().Field(i).Tag.Get(constants.ValidatorTag)
+		if tag == constants.Empty || tag == constants.Hyphen {
+			continue
+		}
+		validator := getValidatorFromTag(tag)
+		valid, err := validator.Validate(v.Field(i).Interface())
+		if !valid && err != nil {
+			fieldMetadatas = append(fieldMetadatas, metadata.GenerateFieldMetadata(v.Type().Field(i), v.Field(i).Interface(), err))
+		}
 	}
+	return metadata.GenerateMetadata(objectMetadata, fieldMetadatas)
 }

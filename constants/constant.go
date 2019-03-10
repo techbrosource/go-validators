@@ -16,18 +16,24 @@ const (
 
 // validator tag types
 const (
-	StringTag       = "string"
-	StringLengthTag = "length_of_string"
-	StringRegexTag  = "string_regex"
-	NumTag          = "number"
-	EnumTag         = "enum"
+	StringTag = "string"
+	NumTag    = "number"
+	EnumTag   = "enum"
+)
+
+// string tag properties
+const (
+	Min     = "min"
+	Max     = "max"
+	Expects = "expects"
+	Number  = "number"
 )
 
 // validator error messages
 const (
 	EmptyString       = "must not be blank"
 	EmptyNumber       = "must not be zero or blank"
-	InvalidString     = "Invalid"
+	InvalidString     = "must be valid data"
 	MinLengthError    = "must be at least %v chars long"
 	MaxLengthError    = "must be less than %v chars long"
 	MinNumberError    = "must be greater than %v"
