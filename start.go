@@ -19,7 +19,7 @@ func main() {
 	}
 	response := utils.Validate(user)
 	fmt.Println("Errors : ")
-	for i := 0; i < len(response.GetFields()); i++ {
-		fmt.Print("field '" + response.GetFields()[i].GetName() + "' " + response.GetFields()[i].GetError().Error() + "\n")
+	for i := 0; i < len(response); i++ {
+		fmt.Print("field '" + response[i].GetName() + "' " + response[i].GetError().Error() + "\n")
 	}
 }

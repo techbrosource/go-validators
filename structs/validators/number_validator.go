@@ -10,8 +10,9 @@ import (
 
 // NumberValidator performs numerical value validation.
 type NumberValidator struct {
-	Min int32
-	Max int32
+	Min         int32            `json:"min"`
+	Max         int32            `json:"max"`
+	DefaultProp DefaultValidator `json:"default"`
 }
 
 // SetProperties to set properties required for validation
@@ -20,6 +21,7 @@ func (v *NumberValidator) SetProperties(t reflect.StructTag) {
 	v.Min = int32(m)
 	m, _ = strconv.ParseInt(t.Get(constants.MaxNum), 10, 32)
 	v.Max = int32(m)
+	v.DefaultProp.SetProperties(t)
 }
 
 // Validate performs validation on given int value

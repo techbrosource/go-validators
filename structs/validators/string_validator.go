@@ -11,9 +11,10 @@ import (
 
 // StringValidator validates string presence and/or its length.
 type StringValidator struct {
-	MinLen int    `json:"minlen"`
-	MaxLen int    `json:"maxlen"`
-	Regex  string `json:"regex"`
+	MinLen      int              `json:"minlen"`
+	MaxLen      int              `json:"maxlen"`
+	Regex       string           `json:"regex"`
+	DefaultProp DefaultValidator `json:"default"`
 }
 
 // SetProperties to set properties required for validation
@@ -23,6 +24,7 @@ func (v *StringValidator) SetProperties(t reflect.StructTag) {
 	m, _ = strconv.Atoi(t.Get(constants.MaxLen))
 	v.MaxLen = m
 	v.Regex = t.Get(constants.Regex)
+	v.DefaultProp.SetProperties(t)
 }
 
 // Validate performs validation on given string value
@@ -38,10 +40,13 @@ func (v *StringValidator) Validate(val interface{}) (bool, error) {
 		return false, fmt.Errorf(constants.MaxLengthError, v.MaxLen)
 	}
 	regex := regexp.MustCompile(v.Regex)
-	r := regex.MatchString(val.(string))
-	fmt.Print(r)
+	defaultProp := v.DefaultProp
+
 	if !regex.MatchString(val.(string)) {
-		return false, fmt.Errorf(constants.InvalidString)
+		if len(defaultProp.Expects) == 0 {
+			return false, fmt.Errorf(constants.InvalidDataString)
+		}
+		return false, fmt.Errorf(constants.InvalidPrefixString + defaultProp.Expects)
 	}
 
 	return true, nil

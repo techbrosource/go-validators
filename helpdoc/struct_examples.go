@@ -1,5 +1,13 @@
 package helpdoc
 
+/*
+validate:"string"
+minlen:"2"
+maxlen:"10"
+regex:"^(0|[1-9][0-9]*)$"
+example:"test string"
+expects:"date"
+*/
 // StringValidators contains all possible validations for string fields
 type StringValidators struct {
 	// validates whether string is blank or not
@@ -22,4 +30,26 @@ type StringValidators struct {
 
 	// validates string containing only numeric values with minimum length
 	NumericRangeStr string `json:"numeric_range_string" validate:"string" regex:"^(0|[1-9][0-9]*)$" minlen:"2" maxlen:"10"`
+
+	// validates string containing only numeric values and mentioned the expectation
+	NumericExpectsStr string `json:"numeric_expects_string" validate:"string" regex:"^(0|[1-9][0-9]*)$" expects:"number"`
+
+	// validates string containing only numeric values with example
+	NumericExampleStr string `json:"numeric_example_string" validate:"string" regex:"^(0|[1-9][0-9]*)$" example:"213"`
+}
+
+/*
+validate:"struct"
+validate:"struct_array"
+*/
+// StringValidators contains all possible validations for string fields
+type StructValidators struct {
+	// validates whether string is blank or not
+	BlankStr string `json:"blank_string" validate:"string"`
+
+	// validates all cases for the nested struct
+	NestedStruct StringValidators `json:"nested_struct" validate:"struct"`
+
+	// validates all cases for the nested array of struct
+	NestedArrayStruct StringValidators `json:"nested_array_struct" validate:"struct_array"`
 }

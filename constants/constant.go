@@ -6,24 +6,28 @@ const (
 	Empty      = ""
 	WhiteSpace = " "
 	Comma      = ","
+	Dot        = "."
 )
 
 // Name of the struct tag used in examples.
 const (
-	ValidatorTag = "validate"
-	JSONTag      = "json"
-	MinNum       = "min"
-	MaxNum       = "max"
-	MinLen       = "minlen"
-	MaxLen       = "maxlen"
-	Regex        = "regex"
+	Validate = "validate"
+	JSON     = "json"
+	MinNum   = "min"
+	MaxNum   = "max"
+	MinLen   = "minlen"
+	MaxLen   = "maxlen"
+	Regex    = "regex"
+	Example  = "example"
 )
 
 // values for 'validate' tag
 const (
-	StringTag = "string"
-	NumTag    = "number"
-	EnumTag   = "enum"
+	StringTag      = "string"
+	NumTag         = "number"
+	EnumTag        = "enum"
+	StructTag      = "struct"
+	StructArrayTag = "struct_array"
 )
 
 // string tag properties
@@ -36,14 +40,15 @@ const (
 
 // validator error messages
 const (
-	EmptyString       = "must not be blank"
-	EmptyNumber       = "must not be zero or blank"
-	InvalidString     = "must be valid data"
-	MinLengthError    = "must be at least %v chars long"
-	MaxLengthError    = "must be less than %v chars long"
-	MinNumberError    = "must be greater than %v"
-	MaxNumberError    = "must be less than %v"
-	InvalidEnumString = "must be valid enum value"
+	EmptyString         = "must not be blank"
+	EmptyNumber         = "must not be zero or blank"
+	InvalidDataString   = "must be valid data"
+	InvalidPrefixString = "must be valid "
+	MinLengthError      = "must be at least %v chars long"
+	MaxLengthError      = "must be less than %v chars long"
+	MinNumberError      = "must be greater than %v"
+	MaxNumberError      = "must be less than %v"
+	InvalidEnumString   = "must be valid enum value"
 )
 
 // Regex : Regular expression to validate string values
