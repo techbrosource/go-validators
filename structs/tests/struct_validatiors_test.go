@@ -35,9 +35,9 @@ func TestNestedStructRequired(t *testing.T) {
 	fe := validate.Validate(parentData)
 	NotEqual(t, len(fe), 0)
 	Equal(t, len(fe), 2)
-	Equal(t, fe[0].GetJSONName(), "parent_field1")
+	Equal(t, fe[0].GetJsonName(), "parent_field1")
 	Equal(t, fe[0].GetError().Error(), constants.EmptyString)
-	Equal(t, fe[1].GetJSONName(), "child.child_field2")
+	Equal(t, fe[1].GetJsonName(), "child.child_field2")
 	Equal(t, fe[1].GetError().Error(), constants.EmptyNumber)
 }
 
@@ -55,10 +55,10 @@ func TestNestedArrayStructRequired(t *testing.T) {
 	fe := validate.Validate(parentData)
 	NotEqual(t, len(fe), 0)
 	Equal(t, len(fe), 3)
-	Equal(t, fe[0].GetJSONName(), "parent_field1")
+	Equal(t, fe[0].GetJsonName(), "parent_field1")
 	Equal(t, fe[0].GetError().Error(), constants.EmptyString)
-	Equal(t, fe[1].GetJSONName(), "child[0].child_field2")
+	Equal(t, fe[1].GetJsonName(), "child[0].child_field2")
 	Equal(t, fe[1].GetError().Error(), constants.EmptyNumber)
-	Equal(t, fe[2].GetJSONName(), "child[1].child_field2")
+	Equal(t, fe[2].GetJsonName(), "child[1].child_field2")
 	Equal(t, fe[2].GetError().Error(), constants.EmptyNumber)
 }
