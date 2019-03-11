@@ -26,7 +26,7 @@ Installation
 
 Use go get.
 
-	go get github.com/techbrosource/go-validators@1.0.0
+	go get github.com/techbrosource/go-validators@v1.0.0
 
 Then import the validator package into your own code.
 
