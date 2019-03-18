@@ -19,6 +19,7 @@ const (
 	MaxLen   = "maxlen"
 	Regex    = "regex"
 	Example  = "example"
+	Required = "required"
 )
 
 // values for 'validate' tag

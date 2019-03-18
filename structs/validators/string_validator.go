@@ -29,25 +29,25 @@ func (v *StringValidator) SetProperties(t reflect.StructTag) {
 
 // Validate performs validation on given string value
 func (v *StringValidator) Validate(val interface{}) (bool, error) {
-	l := len(val.(string))
-	if l == 0 {
-		return false, fmt.Errorf(constants.EmptyString)
-	}
-	if v.MinLen != 0 && l < v.MinLen {
-		return false, fmt.Errorf(constants.MinLengthError, v.MinLen)
-	}
-	if v.MaxLen >= v.MinLen && v.MaxLen != 0 && l > v.MaxLen {
-		return false, fmt.Errorf(constants.MaxLengthError, v.MaxLen)
-	}
-	regex := regexp.MustCompile(v.Regex)
 	defaultProp := v.DefaultProp
-
-	if !regex.MatchString(val.(string)) {
-		if len(defaultProp.Expects) == 0 {
-			return false, fmt.Errorf(constants.InvalidDataString)
+	l := len(val.(string))
+	if l == 0 && defaultProp.Required == "true" {
+		return false, fmt.Errorf(constants.EmptyString)
+	} else if l != 0 {
+		if v.MinLen != 0 && l < v.MinLen {
+			return false, fmt.Errorf(constants.MinLengthError, v.MinLen)
 		}
-		return false, fmt.Errorf(constants.InvalidPrefixString + defaultProp.Expects)
-	}
+		if v.MaxLen >= v.MinLen && v.MaxLen != 0 && l > v.MaxLen {
+			return false, fmt.Errorf(constants.MaxLengthError, v.MaxLen)
+		}
+		regex := regexp.MustCompile(v.Regex)
 
+		if !regex.MatchString(val.(string)) {
+			if len(defaultProp.Expects) == 0 {
+				return false, fmt.Errorf(constants.InvalidDataString)
+			}
+			return false, fmt.Errorf(constants.InvalidPrefixString + defaultProp.Expects)
+		}
+	}
 	return true, nil
 }

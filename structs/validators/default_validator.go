@@ -8,14 +8,16 @@ import (
 
 // DefaultValidator does not perform any validations.
 type DefaultValidator struct {
-	Example string `json:"example"`
-	Expects string `json:"expects"`
+	Example  string `json:"example"`
+	Expects  string `json:"expects"`
+	Required string `json:required`
 }
 
 // SetProperties to set properties required for validation
 func (v *DefaultValidator) SetProperties(t reflect.StructTag) {
 	v.Expects = t.Get(constants.Expects)
 	v.Example = t.Get(constants.Example)
+	v.Required = t.Get(constants.Required)
 }
 
 // Validate performs validation on given string value

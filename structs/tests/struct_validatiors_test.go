@@ -9,18 +9,18 @@ import (
 )
 
 type NetsedStruct struct {
-	ParentField1 string      `json:"parent_field1" validate:"string"`
+	ParentField1 string      `json:"parent_field1" validate:"string" required:"true"`
 	Child        ChildStruct `json:"child" validate:"struct"`
 }
 
 type NetsedArrayStruct struct {
-	ParentField1 string        `json:"parent_field1" validate:"string"`
+	ParentField1 string        `json:"parent_field1" validate:"string" required:"true"`
 	Child        []ChildStruct `json:"child" validate:"struct_array"`
 }
 
 type ChildStruct struct {
-	ChildField1 string `json:"child_field1" validate:"string"`
-	ChildField2 int32  `json:"child_field2" validate:"number"`
+	ChildField1 string `json:"child_field1" validate:"string" required:"true"`
+	ChildField2 int32  `json:"child_field2" validate:"number" required:"true"`
 }
 
 func TestNestedStructRequired(t *testing.T) {

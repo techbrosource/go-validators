@@ -10,7 +10,7 @@ import (
 
 func TestNumberRequired(t *testing.T) {
 	testData := struct {
-		TestField int32 `json:"test_field" validate:"number"`
+		TestField int32 `json:"test_field" validate:"number" required:"true"`
 	}{
 		TestField: 0,
 	}

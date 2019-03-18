@@ -26,15 +26,17 @@ func (v *NumberValidator) SetProperties(t reflect.StructTag) {
 
 // Validate performs validation on given int value
 func (v *NumberValidator) Validate(val interface{}) (bool, error) {
+	defaultProp := v.DefaultProp
 	num := val.(int32)
-	if num == 0 && v.Min == 0 && v.Max == 0 {
+	if num == 0 && defaultProp.Required == "true" {
 		return false, fmt.Errorf(constants.EmptyNumber)
-	}
-	if num <= v.Min {
-		return false, fmt.Errorf(constants.MinNumberError, v.Min)
-	}
-	if v.Max != 0 && num > v.Max {
-		return false, fmt.Errorf(constants.MaxNumberError, v.Max)
+	} else if num != 0 {
+		if num <= v.Min {
+			return false, fmt.Errorf(constants.MinNumberError, v.Min)
+		}
+		if v.Max != 0 && num > v.Max {
+			return false, fmt.Errorf(constants.MaxNumberError, v.Max)
+		}
 	}
 	return true, nil
 }

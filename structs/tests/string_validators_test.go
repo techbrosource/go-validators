@@ -10,7 +10,7 @@ import (
 
 func TestRequired(t *testing.T) {
 	testData := struct {
-		TestField string `json:"test_field" validate:"string"`
+		TestField string `json:"test_field" validate:"string" required:"true"`
 	}{
 		TestField: "",
 	}
@@ -24,7 +24,7 @@ func TestRequired(t *testing.T) {
 
 func TestMinLength(t *testing.T) {
 	testData := struct {
-		TestField string `json:"test_field" validate:"string" minlen:"2"`
+		TestField string `json:"test_field" validate:"string" minlen:"2" required:"true"`
 	}{
 		TestField: "1",
 	}
@@ -38,7 +38,7 @@ func TestMinLength(t *testing.T) {
 
 func TestMaxLength(t *testing.T) {
 	testData := struct {
-		TestField string `json:"test_field" validate:"string" maxlen:"5"`
+		TestField string `json:"test_field" validate:"string" maxlen:"5" required:"true"`
 	}{
 		TestField: "123456",
 	}

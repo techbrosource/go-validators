@@ -11,22 +11,22 @@ expects:"date"
 // StringValidators contains all possible validations for string fields
 type StringValidators struct {
 	// validates whether string is blank or not
-	BlankStr string `json:"blank_string" validate:"string"`
+	BlankStr string `json:"blank_string" validate:"string" required:"true"`
 
 	// validates minimum length of the string
-	MinStr string `json:"min_string" validate:"string" minlen:"2"`
+	MinStr string `json:"min_string" validate:"string" minlen:"2" required:"true"`
 
 	// validates maximum length of the string
-	MaxStr string `json:"max_string" validate:"string" maxlen:"10"`
+	MaxStr string `json:"max_string" validate:"string" maxlen:"10" required:"true"`
 
 	// validates string length both minimum and maximum
-	MinMaxStr string `json:"min_max_string" validate:"string" minlen:"2" maxlen:"10"`
+	MinMaxStr string `json:"min_max_string" validate:"string" minlen:"2" maxlen:"10" required:"false"`
 
 	// validates string containing only numeric values
-	NumericStr string `json:"numeric_string" validate:"string" regex:"^(0|[1-9][0-9]*)$"`
+	NumericStr string `json:"numeric_string" validate:"string" regex:"^(0|[1-9][0-9]*)$" required:"true"`
 
 	// validates string containing only numeric values with minimum length
-	NumericMinStr string `json:"numeric_min_string" validate:"string" regex:"^(0|[1-9][0-9]*)$" minlen:"2"`
+	NumericMinStr string `json:"numeric_min_string" validate:"string" regex:"^(0|[1-9][0-9]*)$" minlen:"2" required:"false"`
 
 	// validates string containing only numeric values with minimum length
 	NumericRangeStr string `json:"numeric_range_string" validate:"string" regex:"^(0|[1-9][0-9]*)$" minlen:"2" maxlen:"10"`
@@ -45,7 +45,7 @@ validate:"struct_array"
 // StringValidators contains all possible validations for string fields
 type StructValidators struct {
 	// validates whether string is blank or not
-	BlankStr string `json:"blank_string" validate:"string"`
+	BlankStr string `json:"blank_string" validate:"string" required:"true"`
 
 	// validates all cases for the nested struct
 	NestedStruct StringValidators `json:"nested_struct" validate:"struct"`
