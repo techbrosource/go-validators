@@ -10,7 +10,7 @@ import (
 
 func TestRequired(t *testing.T) {
 	testData := struct {
-		TestField string `json:"test_field" validate:"string" required:"true"`
+		TestField string `json:"test_field" required:"true"`
 	}{
 		TestField: "",
 	}
@@ -24,7 +24,7 @@ func TestRequired(t *testing.T) {
 
 func TestMinLength(t *testing.T) {
 	testData := struct {
-		TestField string `json:"test_field" validate:"string" minlen:"2" required:"true"`
+		TestField string `json:"test_field" minlen:"2" required:"true"`
 	}{
 		TestField: "1",
 	}
@@ -38,7 +38,7 @@ func TestMinLength(t *testing.T) {
 
 func TestMaxLength(t *testing.T) {
 	testData := struct {
-		TestField string `json:"test_field" validate:"string" maxlen:"5" required:"true"`
+		TestField string `json:"test_field" maxlen:"5" required:"true"`
 	}{
 		TestField: "123456",
 	}
@@ -52,9 +52,9 @@ func TestMaxLength(t *testing.T) {
 
 func TestLengthRange(t *testing.T) {
 	testData := struct {
-		MaxTestField   string `json:"min_test_field" validate:"string" minlen:"2" maxlen:"5" example:"str"`
-		MinTestField   string `json:"max_test_field" validate:"string" minlen:"2" maxlen:"5"`
-		ValidTestField string `json:"valid_test_field" validate:"string" minlen:"2" maxlen:"5"`
+		MaxTestField   string `json:"min_test_field" minlen:"2" maxlen:"5" example:"str"`
+		MinTestField   string `json:"max_test_field" minlen:"2" maxlen:"5"`
+		ValidTestField string `json:"valid_test_field" minlen:"2" maxlen:"5"`
 	}{
 		MaxTestField:   "123456",
 		MinTestField:   "1",
@@ -73,10 +73,10 @@ func TestLengthRange(t *testing.T) {
 
 func TestRegexMatch(t *testing.T) {
 	testData := struct {
-		AlphaNumTestField   string `json:"alpha_num_test_field" validate:"string" regex:"^(0|[1-9][0-9]*)$" expects:"number"`
-		ZeroPrefixTestField string `json:"zero_prefix_test_field" validate:"string" regex:"^(0|[1-9][0-9]*)$" minlen:"3"`
-		MaxLengthTestField  string `json:"max_length_test_field" validate:"string" regex:"^(0|[1-9][0-9]*)$" minlen:"2" maxlen:"5"`
-		ValidTestField      string `json:"valid_test_field" validate:"string" regex:"^(0|[1-9][0-9]*)$" minlen:"2" maxlen:"5"`
+		AlphaNumTestField   string `json:"alpha_num_test_field" regex:"^(0|[1-9][0-9]*)$" expects:"number"`
+		ZeroPrefixTestField string `json:"zero_prefix_test_field" regex:"^(0|[1-9][0-9]*)$" minlen:"3"`
+		MaxLengthTestField  string `json:"max_length_test_field" regex:"^(0|[1-9][0-9]*)$" minlen:"2" maxlen:"5"`
+		ValidTestField      string `json:"valid_test_field" regex:"^(0|[1-9][0-9]*)$" minlen:"2" maxlen:"5"`
 	}{
 		AlphaNumTestField:   "12345s",
 		ZeroPrefixTestField: "01",

@@ -14,10 +14,10 @@ func Validate(s interface{}) []models.FieldSpec {
 	v := reflect.ValueOf(s)
 
 	for i := 0; i < v.NumField(); i++ {
-		tag := v.Type().Field(i).Tag.Get(constants.Validate)
-		if tag == constants.Empty || tag == constants.Hyphen {
-			continue
-		}
+		// tag := v.Type().Field(i).Tag.Get(constants.Validate)
+		// if tag == constants.Empty || tag == constants.Hyphen {
+		// 	continue
+		// }
 		jsonName := v.Type().Field(i).Tag.Get(constants.JSON)
 
 		// logic to validate nested struct
@@ -34,7 +34,7 @@ func Validate(s interface{}) []models.FieldSpec {
 		}
 
 		// logic to validate struct fields
-		validator := getValidatorFromTag(v.Type().Field(i).Tag)
+		validator := getValidatorFromTag(v.Type().Field(i))
 		valid, err := validator.Validate(v.Field(i).Interface())
 		if !valid && err != nil {
 			fieldSpecs = append(fieldSpecs, models.GenerateFieldSpec(v.Type().Field(i), v.Field(i).Interface(), err))
