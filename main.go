@@ -8,8 +8,8 @@ import (
 
 // User data
 type User struct {
-	ID   int32  `json:"id" validate:"number"`
-	Name string `json:"name" validate:"string,min=2,max=10"`
+	ID   int32  `json:"id" required:"true"`
+	Name string `json:"name" required:"true" minlen:"2" maxlen:"10"`
 }
 
 func main() {
