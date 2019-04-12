@@ -13,8 +13,10 @@ const (
 const (
 	Validate = "validate"
 	JSON     = "json"
-	MinNum   = "min"
-	MaxNum   = "max"
+	GTE      = "gte"
+	LTE      = "lte"
+	GT       = "gt"
+	LT       = "lt"
 	MinLen   = "minlen"
 	MaxLen   = "maxlen"
 	Regex    = "regex"
@@ -41,15 +43,17 @@ const (
 
 // validator error messages
 const (
-	EmptyString         = "must not be blank"
-	EmptyNumber         = "must not be zero or blank"
-	InvalidDataString   = "must be valid data"
-	InvalidPrefixString = "must be valid "
-	MinLengthError      = "must be at least %v chars long"
-	MaxLengthError      = "must be less than %v chars long"
-	MinNumberError      = "must be greater than %v"
-	MaxNumberError      = "must be less than %v"
-	InvalidEnumString   = "must be valid enum value"
+	EmptyString                 = "must not be blank"
+	EmptyNumber                 = "must not be zero or blank"
+	InvalidDataString           = "must be valid data"
+	InvalidPrefixString         = "must be valid "
+	MinLengthError              = "must be at least %v chars long"
+	MaxLengthError              = "must be less than %v chars long"
+	GreaterThanEqualNumberError = "must be greater than equal to %v"
+	LessThanEqualNumberError    = "must be less than equal to %v"
+	GreaterThanNumberError      = "must be greater than %v"
+	LessThanNumberError         = "must be less than %v"
+	InvalidEnumString           = "must be valid enum value"
 )
 
 // Regex : Regular expression to validate string values

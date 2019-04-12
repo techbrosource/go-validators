@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"regexp"
 	"strconv"
+	"strings"
 
 	constants "github.com/techbrosource/go-validators/constants"
 )
@@ -30,7 +31,7 @@ func (v *StringValidator) SetProperties(t reflect.StructTag) {
 // Validate performs validation on given string value
 func (v *StringValidator) Validate(val interface{}) (bool, error) {
 	defaultProp := v.DefaultProp
-	l := len(val.(string))
+	l := len(strings.TrimSpace(val.(string)))
 	if l == 0 && defaultProp.Required == "true" {
 		return false, fmt.Errorf(constants.EmptyString)
 	} else if l != 0 {
